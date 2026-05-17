@@ -3,25 +3,44 @@ set -euo pipefail
 
 ROOT="squashfs-root/usr/share/locale"
 
+# Locale które zostają
+KEEP=(
+    pl
+    pl_PL
+    en
+    en_US
+    en_GB
+)
+
 if [[ ! -d "$ROOT" ]]; then
-    echo "Brak katalogu locale"
+    echo "[ERROR] Brak katalogu: $ROOT"
     exit 1
 fi
 
-echo "[*] Zostają tylko: pl, en"
+echo "[*] Locale cleanup started"
+echo "[*] Keeping: ${KEEP[*]}"
 
 cd "$ROOT"
 
 for d in *; do
-    case "$d" in
-        pl|en)
-            echo "[KEEP] $d"
-            ;;
-        *)
-            echo "rm -rf $d"
-            rm -rf "$d"
-            ;;
-    esac
+    # Pomiń pliki (np. locale.alias)
+    [[ -d "$d" ]] || continue
+
+    keep=false
+
+    for k in "${KEEP[@]}"; do
+        if [[ "$d" == "$k" ]]; then
+            keep=true
+            break
+        fi
+    done
+
+    if $keep; then
+        echo "[KEEP] $d"
+    else
+        echo "[REMOVE] $d"
+        rm -rf -- "$d"
+    fi
 done
 
 echo "[*] Locale cleanup finished."
