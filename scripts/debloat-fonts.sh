@@ -22,4 +22,6 @@ rm -rf "$ROOT"/truetype/noto/NotoSansKR*
 echo "[*] Czyszczenie cache fontconfig..."
 rm -rf squashfs-root/var/cache/fontconfig/* || true
 
+find squashfs-root/usr/share/fonts/truetype/noto -type f ! -iname 'NotoSans-Regular.ttf' ! -iname 'NotoSans-Bold.ttf' ! -iname 'NotoSans-Italic.ttf' ! -iname 'NotoSans-BoldItalic.ttf' ! -iname 'NotoSerif-Regular.ttf' ! -iname 'NotoSerif-Bold.ttf' ! -iname 'NotoMono-Regular.ttf' ! -iname 'NotoColorEmoji.ttf' -delete
+
 echo "[*] Font cleanup finished."
